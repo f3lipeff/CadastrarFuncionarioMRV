@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-persistence xmlns="http://www.eclipse.org/eclipselink/xsds/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:eclipselink="http://www.eclipse.org/eclipselink/xsds/persistence" version="Eclipse Persistence Services - 2.6.3.v20160526-8f41838">
+   <name>userReconDB-OR</name>
+   <class-mapping-descriptors>
+      <class-mapping-descriptor xsi:type="object-relational-class-mapping-descriptor">
+         <class>userReconDB.UserReconFelipe</class>
+         <alias>USER_RECON_FELIPE</alias>
+         <primary-key>
+            <field table="USER_RECON_FELIPE" name="MATRICULA_FUNCIONARIO" xsi:type="column"/>
+         </primary-key>
+         <events/>
+         <querying>
+            <queries>
+               <query name="userReconDBSelect" xsi:type="read-all-query">
+                  <reference-class>userReconDB.UserReconFelipe</reference-class>
+                  <container xsi:type="list-container-policy">
+                     <collection-type>java.util.Vector</collection-type>
+                  </container>
+               </query>
+            </queries>
+         </querying>
+         <attribute-mappings>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>primeiroNome</attribute-name>
+               <field table="USER_RECON_FELIPE" name="PRIMEIRO_NOME" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>sobrenome</attribute-name>
+               <field table="USER_RECON_FELIPE" name="SOBRENOME" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>nomeCompleto</attribute-name>
+               <field table="USER_RECON_FELIPE" name="NOME_COMPLETO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>cargoFuncionario</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CARGO_FUNCIONARIO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>descricaoCargo</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DESCRICAO_CARGO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>matriculaFuncionario</attribute-name>
+               <field table="USER_RECON_FELIPE" name="MATRICULA_FUNCIONARIO" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>statusUsuario</attribute-name>
+               <field table="USER_RECON_FELIPE" name="STATUS_USUARIO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>dataAdmissao</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DATA_ADMISSAO" xsi:type="column"/>
+               <attribute-classification>java.sql.Timestamp</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>dataDemissao</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DATA_DEMISSAO" xsi:type="column"/>
+               <attribute-classification>java.sql.Timestamp</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>siglaEmpresa</attribute-name>
+               <field table="USER_RECON_FELIPE" name="SIGLA_EMPRESA" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>empresa</attribute-name>
+               <field table="USER_RECON_FELIPE" name="EMPRESA" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>departamento</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DEPARTAMENTO" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>decricaoUo</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DECRICAO_UO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>centroAlocado</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CENTRO_ALOCADO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>nomeImediato</attribute-name>
+               <field table="USER_RECON_FELIPE" name="NOME_IMEDIATO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>matriculaSuperior</attribute-name>
+               <field table="USER_RECON_FELIPE" name="MATRICULA_SUPERIOR" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>cidade</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CIDADE" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>endereco</attribute-name>
+               <field table="USER_RECON_FELIPE" name="ENDERECO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>estado</attribute-name>
+               <field table="USER_RECON_FELIPE" name="ESTADO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>cep</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CEP" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>pais</attribute-name>
+               <field table="USER_RECON_FELIPE" name="PAIS" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>chaveOrganizacional</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CHAVE_ORGANIZACIONAL" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>descricaoChavorg</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DESCRICAO_CHAVORG" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>pefilChavorg</attribute-name>
+               <field table="USER_RECON_FELIPE" name="PEFIL_CHAVORG" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>idioma</attribute-name>
+               <field table="USER_RECON_FELIPE" name="IDIOMA" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>tipoComunicacao</attribute-name>
+               <field table="USER_RECON_FELIPE" name="TIPO_COMUNICACAO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>tipoUsuariohcm</attribute-name>
+               <field table="USER_RECON_FELIPE" name="TIPO_USUARIOHCM" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>tipoUsuarioecc</attribute-name>
+               <field table="USER_RECON_FELIPE" name="TIPO_USUARIOECC" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>grupoEcc</attribute-name>
+               <field table="USER_RECON_FELIPE" name="GRUPO_ECC" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>dispositivoSaida</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DISPOSITIVO_SAIDA" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>saidaImediata</attribute-name>
+               <field table="USER_RECON_FELIPE" name="SAIDA_IMEDIATA" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>parametro1Hcm</attribute-name>
+               <field table="USER_RECON_FELIPE" name="PARAMETRO1_HCM" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>codigoParametrohcm1</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CODIGO_PARAMETROHCM1" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>parametro2Hcm</attribute-name>
+               <field table="USER_RECON_FELIPE" name="PARAMETRO2_HCM" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>codigoParametrohcm2</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CODIGO_PARAMETROHCM2" xsi:type="column"/>
+               <attribute-classification>java.math.BigDecimal</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>funcaoEcc</attribute-name>
+               <field table="USER_RECON_FELIPE" name="FUNCAO_ECC" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>funcaoHcm1</attribute-name>
+               <field table="USER_RECON_FELIPE" name="FUNCAO_HCM1" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>funcaoHcm2</attribute-name>
+               <field table="USER_RECON_FELIPE" name="FUNCAO_HCM2" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>licenca</attribute-name>
+               <field table="USER_RECON_FELIPE" name="LICENCA" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>tipoSubtype0001</attribute-name>
+               <field table="USER_RECON_FELIPE" name="TIPO_SUBTYPE0001" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>dominio</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DOMINIO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>loginUsuario</attribute-name>
+               <field table="USER_RECON_FELIPE" name="LOGIN_USUARIO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>loginAd</attribute-name>
+               <field table="USER_RECON_FELIPE" name="LOGIN_AD" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>exchange</attribute-name>
+               <field table="USER_RECON_FELIPE" name="EXCHANGE" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>ouAd</attribute-name>
+               <field table="USER_RECON_FELIPE" name="OU_AD" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>cnAd</attribute-name>
+               <field table="USER_RECON_FELIPE" name="CN_AD" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>loginImediato</attribute-name>
+               <field table="USER_RECON_FELIPE" name="LOGIN_IMEDIATO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>telefoneEscritorio</attribute-name>
+               <field table="USER_RECON_FELIPE" name="TELEFONE_ESCRITORIO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>telefoneCoorporativo</attribute-name>
+               <field table="USER_RECON_FELIPE" name="TELEFONE_COORPORATIVO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>mailboxDatabase</attribute-name>
+               <field table="USER_RECON_FELIPE" name="MAILBOX_DATABASE" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>dataCorteTi</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DATA_CORTE_TI" xsi:type="column"/>
+               <attribute-classification>java.sql.Timestamp</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>grupoComunicacao</attribute-name>
+               <field table="USER_RECON_FELIPE" name="GRUPO_COMUNICACAO" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>dataCadastro</attribute-name>
+               <field table="USER_RECON_FELIPE" name="DATA_CADASTRO" xsi:type="column"/>
+               <attribute-classification>java.sql.Timestamp</attribute-classification>
+            </attribute-mapping>
+            <attribute-mapping xsi:type="direct-mapping">
+               <attribute-name>ticketIdm</attribute-name>
+               <field table="USER_RECON_FELIPE" name="TICKET_IDM" xsi:type="column"/>
+               <attribute-classification>java.lang.String</attribute-classification>
+            </attribute-mapping>
+         </attribute-mappings>
+         <descriptor-type>independent</descriptor-type>
+         <caching>
+            <cache-type>weak-reference</cache-type>
+            <cache-size>-1</cache-size>
+            <always-refresh>true</always-refresh>
+         </caching>
+         <remote-caching>
+            <cache-type>weak-reference</cache-type>
+            <cache-size>-1</cache-size>
+         </remote-caching>
+         <instantiation/>
+         <copying xsi:type="instantiation-copy-policy"/>
+         <tables>
+            <table name="USER_RECON_FELIPE"/>
+         </tables>
+         <structure>structureName</structure>
+      </class-mapping-descriptor>
+   </class-mapping-descriptors>
+   <login xsi:type="database-login">
+      <platform-class>org.eclipse.persistence.platform.database.oracle.Oracle9Platform</platform-class>
+      <connection-url></connection-url>
+   </login>
+</object-persistence>

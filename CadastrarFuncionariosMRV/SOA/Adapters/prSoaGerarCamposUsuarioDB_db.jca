@@ -1,0 +1,12 @@
+<adapter-config name="prSoaGerarCamposUsuarioDB" adapter="db" wsdlLocation="../WSDLs/prSoaGerarCamposUsuarioDB.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory UIConnectionName="OIM_RECON" location="eis/DB/oimRecon"/>
+  <endpoint-interaction portType="prSoaGerarCamposUsuarioDB_ptt" operation="prSoaGerarCamposUsuarioDB">
+    <interaction-spec className="oracle.tip.adapter.db.DBStoredProcedureInteractionSpec">
+      <property name="SchemaName" value="OIM_RECON"/>
+      <property name="ProcedureName" value="PR_SOA_GERAR_CAMPOS_USUARIO"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>

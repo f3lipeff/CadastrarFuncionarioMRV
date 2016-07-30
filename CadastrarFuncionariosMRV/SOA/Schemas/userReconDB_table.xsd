@@ -1,0 +1,83 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/userReconDB" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/top/userReconDB" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="UserReconFelipeCollection" type="UserReconFelipeCollection"/>
+   <xs:complexType name="UserReconFelipeCollection">
+      <xs:sequence>
+         <xs:element name="UserReconFelipe" type="UserReconFelipe" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="UserReconFelipe">
+      <xs:sequence>
+         <xs:element name="primeiroNome" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="sobrenome" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="nomeCompleto" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="cargoFuncionario" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="descricaoCargo" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="matriculaFuncionario" type="xs:decimal"/>
+         <xs:element name="statusUsuario" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="dataAdmissao" type="xs:dateTime" minOccurs="0" nillable="true"/>
+         <xs:element name="dataDemissao" type="xs:dateTime" minOccurs="0" nillable="true"/>
+         <xs:element name="siglaEmpresa" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="empresa" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="departamento" type="xs:decimal" minOccurs="0" nillable="true"/>
+         <xs:element name="decricaoUo" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="centroAlocado" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="nomeImediato" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="matriculaSuperior" type="xs:decimal" minOccurs="0" nillable="true"/>
+         <xs:element name="cidade" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="endereco" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="estado" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="cep" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="pais" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="chaveOrganizacional" type="xs:decimal" minOccurs="0" nillable="true"/>
+         <xs:element name="descricaoChavorg" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="pefilChavorg" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="idioma" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="tipoComunicacao" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="tipoUsuariohcm" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="tipoUsuarioecc" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="grupoEcc" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="dispositivoSaida" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="saidaImediata" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="parametro1Hcm" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="codigoParametrohcm1" type="xs:decimal" minOccurs="0" nillable="true"/>
+         <xs:element name="parametro2Hcm" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="codigoParametrohcm2" type="xs:decimal" minOccurs="0" nillable="true"/>
+         <xs:element name="funcaoEcc" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="funcaoHcm1" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="funcaoHcm2" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="licenca" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="tipoSubtype0001" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="dominio" type="string30" minOccurs="0" nillable="true"/>
+         <xs:element name="loginUsuario" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="loginAd" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="exchange" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="ouAd" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="cnAd" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="loginImediato" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="telefoneEscritorio" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="telefoneCoorporativo" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="mailboxDatabase" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="dataCorteTi" type="xs:dateTime" minOccurs="0" nillable="true"/>
+         <xs:element name="grupoComunicacao" type="string300" minOccurs="0" nillable="true"/>
+         <xs:element name="dataCadastro" type="xs:dateTime" minOccurs="0" nillable="true"/>
+         <xs:element name="ticketIdm" type="string300" minOccurs="0" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="UserReconFelipePrimaryKey" type="UserReconFelipePrimaryKey"/>
+   <xs:complexType name="UserReconFelipePrimaryKey">
+      <xs:sequence>
+         <xs:element name="matriculaFuncionario" type="xs:decimal" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="string300">
+      <xs:restriction base="xs:string">
+         <xs:maxLength value="300"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="string30">
+      <xs:restriction base="xs:string">
+         <xs:maxLength value="30"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>

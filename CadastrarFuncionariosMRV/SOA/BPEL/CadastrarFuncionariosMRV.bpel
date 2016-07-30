@@ -1,0 +1,226 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Thu Jul 28 16:51:44 BRT 2016
+  Author:  lipe
+  Type: BPEL 2.0 Process
+  Purpose: Synchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="CadastrarFuncionariosMRV"
+               targetNamespace="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:ui="http://xmlns.oracle.com/soa/designer"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="urn:br:com:mrv:HCM001_Dados_Cadastro_Funcionario"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns2="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/userReconDB"
+         xmlns:ns3="http://xmlns.oracle.com/pcbpel/adapter/db/top/userReconDB"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ns4="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB">
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/userReconDB"
+          location="../Schemas/userReconDB_table.xsd" importType="http://www.w3.org/2001/XMLSchema"/>
+  <import ui:processWSDL="true" namespace="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV" location="../WSDLs/CadastrarFuncionariosMRV.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="cadastrarfuncionariosmrv_client" partnerLinkType="client:CadastrarFuncionariosMRV" myRole="CadastrarFuncionariosMRVProvider"/>
+    <partnerLink name="MiDadosCadastroWS" partnerLinkType="ns1:MiDadosCadastroWS" partnerRole="MI_DADOS_CADASTRO_OUT"/>
+    <partnerLink name="userReconDB" partnerLinkType="ns2:userReconDB_plt" partnerRole="userReconDB_role"/>
+    <partnerLink name="prSoaGerarCamposUsuarioDB" partnerLinkType="ns4:prSoaGerarCamposUsuarioDB_plt"
+                 partnerRole="prSoaGerarCamposUsuarioDB_role"/>
+  </partnerLinks>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:CadastrarFuncionariosMRVRequestMessage"/>
+
+    <!-- Reference to the message that will be returned to the requester-->
+    <variable name="outputVariable" messageType="client:CadastrarFuncionariosMRVResponseMessage"/>
+  </variables>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+
+    <!-- Receive input from requestor. (Note: This maps to operation defined in CadastrarFuncionariosMRV.wsdl) -->
+    <receive name="receiveInput" partnerLink="cadastrarfuncionariosmrv_client" portType="client:CadastrarFuncionariosMRV" operation="process" variable="inputVariable" createInstance="yes"/>
+    <scope name="LookAndPersistData">
+      <variables>
+        <variable name="InvokeMIDadosCadastroWS_InputVariable" messageType="ns1:MT_Dados_Cadastro_IN"/>
+        <variable name="InvokeMIDadosCadastroWS_OutputVariable" messageType="ns1:MT_Dados_Cadastro_OUT"/>
+        <variable name="InvokeUserReconDBMerge_InputVariable" messageType="ns2:UserReconFelipeCollection_msg"/>
+      </variables>
+      <sequence>
+        <assign name="AssignInputWS">
+          <copy>
+            <from>$inputVariable.payload/client:input</from>
+            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeMIDadosCadastroWS_InputVariable.MT_Dados_Cadastro_IN/DataUltAlteracao</to>
+          </copy>
+        </assign>
+        <invoke name="InvokeMIDadosCadastroWS" bpelx:invokeAsDetail="no" partnerLink="MiDadosCadastroWS"
+                portType="ns1:MI_DADOS_CADASTRO_OUT" operation="MI_DADOS_CADASTRO_OUT"
+                inputVariable="InvokeMIDadosCadastroWS_InputVariable"
+                outputVariable="InvokeMIDadosCadastroWS_OutputVariable"/>
+        <if name="IfWSReturnedResults">
+          <documentation>
+            <![CDATA[true]]>
+          </documentation>
+          <condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">count($InvokeMIDadosCadastroWS_OutputVariable.MT_Dados_Cadastro_OUT/DadosCadastro) &gt; 0</condition>
+          <sequence>
+            <scope name="CompletaDataForExistingUser">
+              <forEach parallel="no" counterName="userCounter" name="ForEachUser">
+                <startCounterValue expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">1</startCounterValue>
+                <finalCounterValue expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">count($InvokeMIDadosCadastroWS_OutputVariable.MT_Dados_Cadastro_OUT/DadosCadastro)</finalCounterValue>
+                <scope name="Scope1">
+                  <variables>
+                    <variable name="InvokeUserReconDBSelect_InputVariable"
+                              messageType="ns2:selectByPrimaryKey_inputParameters"/>
+                    <variable name="InvokeUserReconDBSelect_OutputVariable"
+                              messageType="ns2:UserReconFelipeCollection_msg"/>
+                  </variables>
+                  <sequence name="Sequence1">
+                    <assign name="AssignWSOutputToMergetInput">
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/PrimeiroNome')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:primeiroNome</to>
+                      </copy>
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Sobrenome')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:sobrenome</to>
+                      </copy>
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/NomeCompleto')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:nomeCompleto</to>
+                      </copy>
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoCargo')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:descricaoCargo</to>
+                      </copy>
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:matriculaFuncionario</to>
+                      </copy>
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaSuperior')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:matriculaSuperior</to>
+                      </copy>
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/OuAd')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:ouAd</to>
+                      </copy>
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Dominio')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dominio</to>
+                      </copy>
+                    </assign>
+                    <assign name="AssignSelectInputVar">
+                      <copy>
+                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario')</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBSelect_InputVariable.selectByPrimaryKey_inputParameters/ns3:matriculaFuncionario</to>
+                      </copy>
+                    </assign>
+                    <invoke name="InvokeUserReconDBSelect" bpelx:invokeAsDetail="no" partnerLink="userReconDB"
+                            portType="ns2:userReconDB_ptt" operation="selectByPrimaryKey"
+                            inputVariable="InvokeUserReconDBSelect_InputVariable"
+                            outputVariable="InvokeUserReconDBSelect_OutputVariable"/>
+                    <if name="IfFoundUser">
+                      <documentation>
+                        <![CDATA[true]]>
+                      </documentation>
+                      <condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">count($InvokeUserReconDBSelect_OutputVariable.UserReconFelipeCollection/ns3:UserReconFelipe) &gt; 0</condition>
+                      <assign name="AssignSOAGeneratedFields">
+                        <copy>
+                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:dataCadastro')</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataCadastro</to>
+                        </copy>
+                        <copy>
+                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:mailboxDatabase')</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:mailboxDatabase</to>
+                        </copy>
+                        <copy>
+                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:cnAd')</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:cnAd</to>
+                        </copy>
+                        <copy>
+                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginAd')</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginAd</to>
+                        </copy>
+                        <copy>
+                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:exchange')</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:exchange</to>
+                        </copy>
+                        <copy>
+                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginUsuario')</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginUsuario</to>
+                        </copy>
+                      </assign>
+                    </if>
+                  </sequence>
+                </scope>
+              </forEach>
+            </scope>
+            <scope name="MergeUserData">
+              <sequence>
+                <invoke name="InvokeUserReconDBMerge" bpelx:invokeAsDetail="no" partnerLink="userReconDB"
+                        portType="ns2:userReconDB_ptt" operation="merge"
+                        inputVariable="InvokeUserReconDBMerge_InputVariable"/>
+              </sequence>
+            </scope>
+            <scope name="GenerateUserFieldsAndUpdate">
+              <variables>
+                <variable name="InvokePrSoaGerarCamposUsuariosDB_InputVariable" messageType="ns4:args_in_msg"/>
+              </variables>
+              <invoke name="InvokePrSoaGerarCamposUsuariosDB" bpelx:invokeAsDetail="no"
+                      partnerLink="prSoaGerarCamposUsuarioDB" portType="ns4:prSoaGerarCamposUsuarioDB_ptt"
+                      operation="prSoaGerarCamposUsuarioDB"
+                      inputVariable="InvokePrSoaGerarCamposUsuariosDB_InputVariable"/>
+            </scope>
+          </sequence>
+        </if>
+      </sequence>
+    </scope>
+    <assign name="Assign1">
+      <copy>
+        <from>"ok "</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/client:result</to>
+      </copy>
+    </assign>
+    <!-- Generate reply to synchronous request -->
+    <reply name="replyOutput" partnerLink="cadastrarfuncionariosmrv_client" portType="client:CadastrarFuncionariosMRV" operation="process" variable="outputVariable"/>
+  </sequence>
+</process>
