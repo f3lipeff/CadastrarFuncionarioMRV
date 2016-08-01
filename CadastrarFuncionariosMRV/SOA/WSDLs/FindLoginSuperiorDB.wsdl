@@ -1,0 +1,32 @@
+<wsdl:definitions
+     name="FindLoginSuperiorDB"
+     targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB"
+     xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB"
+     xmlns:jca="http://xmlns.oracle.com/pcbpel/wsdl/jca/"
+     xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/FindLoginSuperiorDB"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    >
+  <plt:partnerLinkType name="FindLoginSuperiorDB_plt" >
+    <plt:role name="FindLoginSuperiorDB_role" >
+      <plt:portType name="tns:FindLoginSuperiorDB_ptt" />
+    </plt:role>
+  </plt:partnerLinkType>
+    <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" >
+        <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/FindLoginSuperiorDB" schemaLocation="../Schemas/FindLoginSuperiorDB.xsd" />
+      </schema>
+    </wsdl:types>
+    <wsdl:message name="FindLoginSuperiorDBInput_msg">
+        <wsdl:part name="FindLoginSuperiorDBInput_msg" element="db:FindLoginSuperiorDBInput"/>
+    </wsdl:message>
+    <wsdl:message name="FindLoginSuperiorDBOutputCollection_msg">
+        <wsdl:part name="FindLoginSuperiorDBOutputCollection" element="db:FindLoginSuperiorDBOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="FindLoginSuperiorDB_ptt">
+        <wsdl:operation name="FindLoginSuperiorDB">
+            <wsdl:input message="tns:FindLoginSuperiorDBInput_msg"/>
+            <wsdl:output message="tns:FindLoginSuperiorDBOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

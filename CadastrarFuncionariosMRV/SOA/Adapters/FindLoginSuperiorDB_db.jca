@@ -1,0 +1,11 @@
+<adapter-config name="FindLoginSuperiorDB" adapter="db" wsdlLocation="../WSDLs/FindLoginSuperiorDB.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory UIConnectionName="OIM_RECON" location="eis/DB/oimRecon"/>
+  <endpoint-interaction portType="FindLoginSuperiorDB_ptt" operation="FindLoginSuperiorDB">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="SELECT LOGIN_AD FROM USER_RECON_FELIPE WHERE MATRICULA_FUNCIONARIO = #MATRICULA_SUPERIOR"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>

@@ -1,0 +1,11 @@
+<adapter-config name="FindCNDB" adapter="db" wsdlLocation="../WSDLs/FindCNDB.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory UIConnectionName="OIM_RECON" location="eis/DB/oimRecon"/>
+  <endpoint-interaction portType="FindCNDB_ptt" operation="FindCNDB">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="SELECT 'CN=' || #NOME_COMPLETO || ',' || CN_ORG FROM ORGANIZACAO_CN WHERE OU_AD = #OU_AD"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>

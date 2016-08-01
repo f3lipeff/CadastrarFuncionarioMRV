@@ -21,6 +21,12 @@
           location="WSDLs/userReconDB.wsdl" importType="wsdl"/>
   <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB"
           location="WSDLs/prSoaGerarCamposUsuarioDB.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB"
+          location="WSDLs/FindLoginSuperiorDB.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB"
+          location="WSDLs/FindCNDB.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB"
+          location="WSDLs/findMailBoxDB.wsdl" importType="wsdl"/>
   <service name="cadastrarfuncionariosmrv_client_ep" ui:wsdlLocation="WSDLs/CadastrarFuncionariosMRV.wsdl">
     <interface.wsdl interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"/>
     <binding.ws port="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.endpoint(cadastrarfuncionariosmrv_client_ep/CadastrarFuncionariosMRV_pt)"/>
@@ -41,6 +47,15 @@
       </reference>
       <reference name="prSoaGerarCamposUsuarioDB" ui:wsdlLocation="WSDLs/prSoaGerarCamposUsuarioDB.wsdl">
         <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB#wsdl.interface(prSoaGerarCamposUsuarioDB_ptt)"/>
+      </reference>
+      <reference name="FindLoginSuperiorDB" ui:wsdlLocation="WSDLs/FindLoginSuperiorDB.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB#wsdl.interface(FindLoginSuperiorDB_ptt)"/>
+      </reference>
+      <reference name="FindCNDB" ui:wsdlLocation="WSDLs/FindCNDB.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB#wsdl.interface(FindCNDB_ptt)"/>
+      </reference>
+      <reference name="findMailBoxDB" ui:wsdlLocation="WSDLs/findMailBoxDB.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB#wsdl.interface(findMailBoxDB_ptt)"/>
       </reference>
     </componentType>
     <property name="bpel.config.transaction" type="xs:string" many="false">required</property>
@@ -70,6 +85,30 @@
     <property name="jca.retry.backoff" type="xs:int" many="false" override="may">2</property>
     <property name="jca.retry.maxInterval" type="xs:int" many="false" override="may">120</property>
   </reference>
+  <reference name="FindLoginSuperiorDB" ui:wsdlLocation="WSDLs/FindLoginSuperiorDB.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB#wsdl.interface(FindLoginSuperiorDB_ptt)"/>
+    <binding.jca config="Adapters/FindLoginSuperiorDB_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false" override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false" override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:int" many="false" override="may">120</property>
+  </reference>
+  <reference name="FindCNDB" ui:wsdlLocation="WSDLs/FindCNDB.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB#wsdl.interface(FindCNDB_ptt)"/>
+    <binding.jca config="Adapters/FindCNDB_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false" override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false" override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:int" many="false" override="may">120</property>
+  </reference>
+  <reference name="findMailBoxDB" ui:wsdlLocation="WSDLs/findMailBoxDB.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB#wsdl.interface(findMailBoxDB_ptt)"/>
+    <binding.jca config="Adapters/findMailBoxDB_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false" override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false" override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:int" many="false" override="may">120</property>
+  </reference>
   <wire>
     <source.uri>cadastrarfuncionariosmrv_client_ep</source.uri>
     <target.uri>CadastrarFuncionariosMRV/cadastrarfuncionariosmrv_client</target.uri>
@@ -85,5 +124,17 @@
   <wire>
     <source.uri>CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB</source.uri>
     <target.uri>prSoaGerarCamposUsuarioDB</target.uri>
+  </wire>
+  <wire>
+    <source.uri>CadastrarFuncionariosMRV/FindLoginSuperiorDB</source.uri>
+    <target.uri>FindLoginSuperiorDB</target.uri>
+  </wire>
+  <wire>
+    <source.uri>CadastrarFuncionariosMRV/FindCNDB</source.uri>
+    <target.uri>FindCNDB</target.uri>
+  </wire>
+  <wire>
+    <source.uri>CadastrarFuncionariosMRV/findMailBoxDB</source.uri>
+    <target.uri>findMailBoxDB</target.uri>
   </wire>
 </composite>

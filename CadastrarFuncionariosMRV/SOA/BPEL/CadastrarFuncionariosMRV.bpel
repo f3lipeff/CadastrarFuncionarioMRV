@@ -31,7 +31,13 @@
          xmlns:ns2="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/userReconDB"
          xmlns:ns3="http://xmlns.oracle.com/pcbpel/adapter/db/top/userReconDB"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns:ns4="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB">
+         xmlns:ns4="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB"
+         xmlns:ns5="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB"
+         xmlns:ns6="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB"
+         xmlns:ns7="http://xmlns.oracle.com/pcbpel/adapter/db/FindCNDB"
+         xmlns:ns8="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB"
+         xmlns:ns9="http://xmlns.oracle.com/pcbpel/adapter/db/sp/findMailBoxDB"
+         xmlns:ns10="http://xmlns.oracle.com/pcbpel/adapter/db/FindLoginSuperiorDB">
   <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/userReconDB"
           location="../Schemas/userReconDB_table.xsd" importType="http://www.w3.org/2001/XMLSchema"/>
   <import ui:processWSDL="true" namespace="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV" location="../WSDLs/CadastrarFuncionariosMRV.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -52,6 +58,10 @@
     <partnerLink name="userReconDB" partnerLinkType="ns2:userReconDB_plt" partnerRole="userReconDB_role"/>
     <partnerLink name="prSoaGerarCamposUsuarioDB" partnerLinkType="ns4:prSoaGerarCamposUsuarioDB_plt"
                  partnerRole="prSoaGerarCamposUsuarioDB_role"/>
+    <partnerLink name="FindLoginSuperiorDB" partnerLinkType="ns5:FindLoginSuperiorDB_plt"
+                 partnerRole="FindLoginSuperiorDB_role"/>
+    <partnerLink name="FindCNDB" partnerLinkType="ns6:FindCNDB_plt" partnerRole="FindCNDB_role"/>
+    <partnerLink name="findMailBoxDB" partnerLinkType="ns8:findMailBoxDB_plt" partnerRole="findMailBoxDB_role"/>
   </partnerLinks>
 
   <!-- 
@@ -112,45 +122,201 @@
                               messageType="ns2:selectByPrimaryKey_inputParameters"/>
                     <variable name="InvokeUserReconDBSelect_OutputVariable"
                               messageType="ns2:UserReconFelipeCollection_msg"/>
+                    <variable name="InvokeFindLoginSuperiorDB_InputVariable"
+                                  messageType="ns5:FindLoginSuperiorDBInput_msg"/>
+                    <variable name="InvokeFindLoginSuperiorDB_OutputVariable"
+                                messageType="ns5:FindLoginSuperiorDBOutputCollection_msg"/>
+                    <variable name="InvokeFIndCNDB_InputVariable" messageType="ns6:FindCNDBInput_msg"/>
+                        <variable name="InvokeFIndCNDB_OutputVariable" messageType="ns6:FindCNDBOutputCollection_msg"/>
+                    <variable name="InvokeFindMailBoxDB_InputVariable" messageType="ns8:args_in_msg"/>
+                    <variable name="InvokeFindMailBoxDB_OutputVariable" messageType="ns8:args_out_msg"/>
                   </variables>
                   <sequence name="Sequence1">
                     <assign name="AssignWSOutputToMergetInput">
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/PrimeiroNome')</from>
-                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:primeiroNome</to>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/PrimeiroNome'))</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:primeiroNome</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/NomeImediato'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:nomeImediato</to>
+                      </copy>
+                       <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/CentroAlocado'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:centroAlocado</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Cidade'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:cidade</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Endereco'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:endereco</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Estado'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:estado</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/CEP'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:cep</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Pais'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:pais</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/ChaveOrganizacional'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:chaveOrganizacional</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoChavOrg'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:descricaoChavorg</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/PerfilChavOrg'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:pefilChavorg</to>
                       </copy>
                       <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Sobrenome')</from>
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Idioma'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:idioma</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/TipoComunicacao'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:tipoComunicacao</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/TipoUsuarioHcm'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:tipoUsuariohcm</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/TipousuarioEcc'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:tipoUsuarioecc</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/GrupoEcc'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:grupoEcc</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DispositivoSaida'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dispositivoSaida</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/SaidaImediata'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:saidaImediata</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Parametro1Hcm'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:parametro1Hcm</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/CodigoParametroHcm1'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:codigoParametrohcm1</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Parametro2Hcm'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:parametro2Hcm</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/CodigoParametroHcm2'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:codigoParametrohcm2</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/FuncaoEcc'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:funcaoEcc</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/FuncaoHcm1'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:funcaoHcm1</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/FuncaoHcm2'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:funcaoHcm2</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Licenca'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:licenca</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/TipoSubtype0001'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:tipoSubtype0001</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/LoginUsuario'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginUsuario</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/LoginAd'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginAd</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Exchange'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:exchange</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/CargoFuncionario'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:cargoFuncionario</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/StatusUsuario'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:statusUsuario</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DataAdmissao'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataAdmissao</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DataDemissao'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataDemissao</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Empresa'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:siglaEmpresa</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoEmpresa'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:empresa</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Departamento'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:departamento</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DecricaoUnidadeOrg'))</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:decricaoUo</to>
+                      </copy>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Sobrenome'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:sobrenome</to>
                       </copy>
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/NomeCompleto')</from>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/NomeCompleto'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:nomeCompleto</to>
                       </copy>
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoCargo')</from>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoCargo'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:descricaoCargo</to>
                       </copy>
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario')</from>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:matriculaFuncionario</to>
                       </copy>
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaSuperior')</from>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaSuperior'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:matriculaSuperior</to>
                       </copy>
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/OuAd')</from>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/OuAd'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:ouAd</to>
                       </copy>
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Dominio')</from>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/Dominio'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dominio</to>
                       </copy>
                     </assign>
                     <assign name="AssignSelectInputVar">
-                      <copy>
-                        <from>bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario')</from>
+                      <copy bpelx:insertMissingFromData="yes">
+                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario'))</from>
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBSelect_InputVariable.selectByPrimaryKey_inputParameters/ns3:matriculaFuncionario</to>
                       </copy>
                     </assign>
@@ -164,32 +330,97 @@
                       </documentation>
                       <condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">count($InvokeUserReconDBSelect_OutputVariable.UserReconFelipeCollection/ns3:UserReconFelipe) &gt; 0</condition>
                       <assign name="AssignSOAGeneratedFields">
-                        <copy>
-                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:dataCadastro')</from>
+                        <copy bpelx:insertMissingFromData="yes">
+                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:dataCadastro'))</from>
                           <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataCadastro</to>
                         </copy>
-                        <copy>
-                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:mailboxDatabase')</from>
-                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:mailboxDatabase</to>
-                        </copy>
-                        <copy>
-                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:cnAd')</from>
-                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:cnAd</to>
-                        </copy>
-                        <copy>
-                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginAd')</from>
+                        <copy bpelx:insertMissingFromData="yes">
+                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginAd'))</from>
                           <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginAd</to>
                         </copy>
-                        <copy>
-                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:exchange')</from>
+                        <copy bpelx:insertMissingFromData="yes">
+                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:exchange'))</from>
                           <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:exchange</to>
                         </copy>
-                        <copy>
-                          <from>bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginUsuario')</from>
+                        <copy bpelx:insertMissingFromData="yes">
+                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginUsuario'))</from>
                           <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginUsuario</to>
                         </copy>
                       </assign>
+                      <else>
+                        <sequence name="Sequence4">
+                          <assign name="AssignInvokeFindMailBoxDB_InputVariable">
+                            <copy bpelx:insertMissingFromData="yes">
+                              <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoCargo'))</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFindMailBoxDB_InputVariable.InputParameters/ns9:VDESCRICAO_CARGO</to>
+                            </copy>
+                            <copy bpelx:insertMissingFromData="yes">
+                              <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/PrimeiroNome'))</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFindMailBoxDB_InputVariable.InputParameters/ns9:VPRIMEIRO_NOME</to>
+                            </copy>
+                          </assign>
+                          <invoke name="InvokeFindMailBoxDB" bpelx:invokeAsDetail="no" partnerLink="findMailBoxDB"
+                                  portType="ns8:findMailBoxDB_ptt" operation="findMailBoxDB"
+                                  inputVariable="InvokeFindMailBoxDB_InputVariable"
+                                  outputVariable="InvokeFindMailBoxDB_OutputVariable"/>
+                          <assign name="AssignDataCadastroAndMailbox">
+                            <copy>
+                              <from>$InvokeFindMailBoxDB_OutputVariable.OutputParameters/ns9:FN_BUSCA_MAILBOX</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:mailboxDatabase</to>
+                            </copy>
+                            <copy>
+                              <from>xp20:current-dateTime()</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataCadastro</to>
+                            </copy>
+                          </assign>
+                        </sequence>
+                      </else>
                     </if>
+                    <scope name="FindLoginSuperior">
+                      <sequence name="Sequence2">
+                        <assign name="AssignInvokeFindLoginSuperiorDBInput">
+                          <copy>
+                            <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaSuperior'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFindLoginSuperiorDB_InputVariable.FindLoginSuperiorDBInput_msg/ns10:MATRICULA_SUPERIOR</to>
+                          </copy>
+                        </assign>
+                        <invoke name="InvokeFindLoginSuperiorDB" bpelx:invokeAsDetail="no"
+                                partnerLink="FindLoginSuperiorDB" portType="ns5:FindLoginSuperiorDB_ptt"
+                                operation="FindLoginSuperiorDB"
+                                inputVariable="InvokeFindLoginSuperiorDB_InputVariable"
+                                outputVariable="InvokeFindLoginSuperiorDB_OutputVariable"/>
+                        <assign name="AssignLoginSuperior">
+                          <copy>
+                            <from>$InvokeFindLoginSuperiorDB_OutputVariable.FindLoginSuperiorDBOutputCollection/ns10:FindLoginSuperiorDBOutput/ns10:LOGIN_AD</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginImediato</to>
+                          </copy>
+                        </assign>
+                      </sequence>
+                    </scope>
+                    <scope name="FindCN">
+                      <sequence name="Sequence3">
+                        <assign name="AssignInvokeFIndCNDBInput">
+                          <copy>
+                            <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/OuAd'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFIndCNDB_InputVariable.FindCNDBInput_msg/ns7:OU_AD</to>
+                          </copy>
+                          <copy ignoreMissingFromData="yes">
+                            <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/NomeCompleto'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFIndCNDB_InputVariable.FindCNDBInput_msg/ns7:NOME_COMPLETO</to>
+                          </copy>
+                        </assign>
+                        <invoke name="InvokeFIndCNDB" bpelx:invokeAsDetail="no" partnerLink="FindCNDB"
+                                portType="ns6:FindCNDB_ptt" operation="FindCNDB"
+                                inputVariable="InvokeFIndCNDB_InputVariable"
+                                outputVariable="InvokeFIndCNDB_OutputVariable"/>
+                        <assign name="AssignCN">
+                          <copy>
+                            <from>$InvokeFIndCNDB_OutputVariable.FindCNDBOutputCollection/ns7:FindCNDBOutput/ns7:CN________CN_ORG</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:cnAd</to>
+                          </copy>
+                        </assign>
+                      </sequence>
+                    </scope>
                   </sequence>
                 </scope>
               </forEach>

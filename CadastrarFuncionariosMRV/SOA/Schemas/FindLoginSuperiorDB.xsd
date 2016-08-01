@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/FindLoginSuperiorDB" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/FindLoginSuperiorDB" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="FindLoginSuperiorDBInput" type="FindLoginSuperiorDBInput"/>
+   <xs:complexType name="FindLoginSuperiorDBInput">
+      <xs:sequence>
+         <xs:element name="MATRICULA_SUPERIOR" type="xs:decimal" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="FindLoginSuperiorDBOutputCollection" type="FindLoginSuperiorDBOutputCollection"/>
+   <xs:complexType name="FindLoginSuperiorDBOutputCollection">
+      <xs:sequence>
+         <xs:element name="FindLoginSuperiorDBOutput" type="FindLoginSuperiorDBOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="FindLoginSuperiorDBOutput">
+      <xs:sequence>
+         <xs:element name="LOGIN_AD" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

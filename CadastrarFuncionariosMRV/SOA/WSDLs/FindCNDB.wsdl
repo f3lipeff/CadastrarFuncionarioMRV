@@ -1,0 +1,40 @@
+<wsdl:definitions
+     name="FindCNDB"
+     targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB"
+     xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB"
+     xmlns:jca="http://xmlns.oracle.com/pcbpel/wsdl/jca/"
+     xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/FindCNDB"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    >
+  <plt:partnerLinkType name="FindCNDB_plt" >
+    <plt:role name="FindCNDB_role" >
+      <plt:portType name="tns:FindCNDB_ptt" />
+    </plt:role>
+  </plt:partnerLinkType>
+  <plt:partnerLinkType name="FindCNDB_plt" >
+    <plt:role name="FindCNDB_role" >
+      <plt:portType name="tns:FindCNDB_ptt" />
+    </plt:role>
+  </plt:partnerLinkType>
+    <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" >
+        <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/FindCNDB" schemaLocation="../Schemas/FindCNDB.xsd" />
+      </schema>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" >
+        <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/FindCNDB" schemaLocation="../Schemas/FindCNDB.xsd" />
+      </schema>
+    </wsdl:types>
+    <wsdl:message name="FindCNDBInput_msg">
+        <wsdl:part name="FindCNDBInput_msg" element="db:FindCNDBInput"/>
+    </wsdl:message>
+    <wsdl:message name="FindCNDBOutputCollection_msg">
+        <wsdl:part name="FindCNDBOutputCollection" element="db:FindCNDBOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="FindCNDB_ptt">
+        <wsdl:operation name="FindCNDB">
+            <wsdl:input message="tns:FindCNDBInput_msg"/>
+            <wsdl:output message="tns:FindCNDBOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,12 @@
+<adapter-config name="findMailBoxDB" adapter="db" wsdlLocation="../WSDLs/findMailBoxDB.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory UIConnectionName="OIM_RECON" location="eis/DB/oimRecon"/>
+  <endpoint-interaction portType="findMailBoxDB_ptt" operation="findMailBoxDB">
+    <interaction-spec className="oracle.tip.adapter.db.DBStoredProcedureInteractionSpec">
+      <property name="SchemaName" value="OIM_RECON"/>
+      <property name="ProcedureName" value="FN_BUSCA_MAILBOX"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>

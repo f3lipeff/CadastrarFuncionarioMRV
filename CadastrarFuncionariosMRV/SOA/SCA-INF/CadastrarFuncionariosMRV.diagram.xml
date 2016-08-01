@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dgm:gDiagram xmlns:dgm="http://xmlns.oracle.com/sca/soadgm">
     <dgm:gService name="cadastrarfuncionariosmrv_client_ep">
-        <dgm:body borderWidth="2" arcRad="20" X="21" Y="151" width="137" height="84">
+        <dgm:body borderWidth="2" arcRad="20" X="21" Y="294" width="137" height="84">
             <dgm:borderColor r="153" g="153" b="153"/>
             <dgm:bgColor r="255" g="255" b="255"/>
         </dgm:body>
-        <dgm:shadow arcRad="20" X="11" Y="144" width="156" height="98">
+        <dgm:shadow arcRad="20" X="11" Y="287" width="156" height="98">
             <dgm:bgColor r="196" g="228" b="240"/>
         </dgm:shadow>
         <dgm:outputPort name="cadastrarfuncionariosmrv_client_ep" X="127" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"/>
@@ -15,11 +15,11 @@
         </dgm:operations>
     </dgm:gService>
     <dgm:gReference name="MiDadosCadastroWS">
-        <dgm:body borderWidth="2" arcRad="20" X="826" Y="26" width="136" height="84">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="26" width="136" height="84">
             <dgm:borderColor r="153" g="153" b="153"/>
             <dgm:bgColor r="255" g="255" b="255"/>
         </dgm:body>
-        <dgm:shadow arcRad="20" X="816" Y="19" width="156" height="98">
+        <dgm:shadow arcRad="20" X="806" Y="19" width="156" height="98">
             <dgm:bgColor r="196" g="228" b="240"/>
         </dgm:shadow>
         <dgm:inputPort name="MiDadosCadastroWS" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="urn:br:com:mrv:HCM001_Dados_Cadastro_Funcionario#wsdl.interface(MI_DADOS_CADASTRO_OUT)"/>
@@ -29,11 +29,11 @@
         </dgm:operations>
     </dgm:gReference>
     <dgm:gReference name="userReconDB">
-        <dgm:body borderWidth="2" arcRad="20" X="826" Y="144" width="136" height="96">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="144" width="136" height="96">
             <dgm:borderColor r="153" g="153" b="153"/>
             <dgm:bgColor r="255" g="255" b="255"/>
         </dgm:body>
-        <dgm:shadow arcRad="20" X="816" Y="137" width="156" height="110">
+        <dgm:shadow arcRad="20" X="806" Y="137" width="156" height="110">
             <dgm:bgColor r="196" g="228" b="240"/>
         </dgm:shadow>
         <dgm:inputPort name="userReconDB" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/userReconDB#wsdl.interface(userReconDB_ptt)"/>
@@ -44,11 +44,11 @@
         </dgm:operations>
     </dgm:gReference>
     <dgm:gReference name="prSoaGerarCamposUsuarioDB">
-        <dgm:body borderWidth="2" arcRad="20" X="826" Y="274" width="136" height="84">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="274" width="136" height="84">
             <dgm:borderColor r="153" g="153" b="153"/>
             <dgm:bgColor r="255" g="255" b="255"/>
         </dgm:body>
-        <dgm:shadow arcRad="20" X="816" Y="267" width="156" height="98">
+        <dgm:shadow arcRad="20" X="806" Y="267" width="156" height="98">
             <dgm:bgColor r="196" g="228" b="240"/>
         </dgm:shadow>
         <dgm:inputPort name="prSoaGerarCamposUsuarioDB" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB#wsdl.interface(prSoaGerarCamposUsuarioDB_ptt)"/>
@@ -57,44 +57,110 @@
             <dgm:item>prSoaGerarCamposUsuarioDB</dgm:item>
         </dgm:operations>
     </dgm:gReference>
+    <dgm:gReference name="FindLoginSuperiorDB">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="392" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="385" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="FindLoginSuperiorDB" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB#wsdl.interface(FindLoginSuperiorDB_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/db_adapter_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>FindLoginSuperiorDB</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="FindCNDB">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="510" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="503" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="FindCNDB" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB#wsdl.interface(FindCNDB_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/db_adapter_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>FindCNDB</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="findMailBoxDB">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="628" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="621" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="findMailBoxDB" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB#wsdl.interface(findMailBoxDB_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/db_adapter_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>findMailBoxDB</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
     <dgm:gComponent name="CadastrarFuncionariosMRV">
-        <dgm:body borderWidth="2" arcRad="20" X="427" Y="136" width="130" height="111">
+        <dgm:body borderWidth="2" arcRad="20" X="422" Y="279" width="130" height="186">
             <dgm:borderColor r="69" g="113" b="140"/>
             <dgm:lightBgColor r="166" g="208" b="230"/>
             <dgm:darkBgColor r="99" g="162" b="201"/>
         </dgm:body>
-        <dgm:shadow arcRad="20" X="417" Y="129" width="150" height="127">
+        <dgm:shadow arcRad="20" X="412" Y="272" width="150" height="202">
             <dgm:bgColor r="196" g="228" b="240"/>
         </dgm:shadow>
         <dgm:inputPort name="cadastrarfuncionariosmrv_client" X="-10" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"/>
         <dgm:outputPort name="MiDadosCadastroWS" X="120" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="urn:br:com:mrv:HCM001_Dados_Cadastro_Funcionario#wsdl.interface(MI_DADOS_CADASTRO_OUT)"/>
         <dgm:outputPort name="userReconDB" X="120" Y="40" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/userReconDB#wsdl.interface(userReconDB_ptt)"/>
         <dgm:outputPort name="prSoaGerarCamposUsuarioDB" X="120" Y="65" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB#wsdl.interface(prSoaGerarCamposUsuarioDB_ptt)"/>
+        <dgm:outputPort name="FindLoginSuperiorDB" X="120" Y="90" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindLoginSuperiorDB#wsdl.interface(FindLoginSuperiorDB_ptt)"/>
+        <dgm:outputPort name="FindCNDB" X="120" Y="115" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/FindCNDB#wsdl.interface(FindCNDB_ptt)"/>
+        <dgm:outputPort name="findMailBoxDB" X="120" Y="140" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB#wsdl.interface(findMailBoxDB_ptt)"/>
         <dgm:nodeIcon URI="/oracle/tip/tools/ide/bpel/shared/plugins/resources/images/soa/process_20x20.png" X="10" Y="4" width="20" height="20"/>
     </dgm:gComponent>
     <dgm:gWireLink source="cadastrarfuncionariosmrv_client_ep" target="CadastrarFuncionariosMRV/cadastrarfuncionariosmrv_client" width="2">
-        <dgm:gSegment X1="168" Y1="161" X2="417" Y2="161"/>
+        <dgm:gSegment X1="168" Y1="304" X2="412" Y2="304"/>
         <dgm:baseColor r="153" g="153" b="153"/>
         <dgm:selectedColor r="49" g="106" b="196"/>
     </dgm:gWireLink>
     <dgm:gWireLink source="CadastrarFuncionariosMRV/MiDadosCadastroWS" target="MiDadosCadastroWS" width="2">
-        <dgm:gSegment X1="567" Y1="161" X2="591" Y2="161"/>
-        <dgm:gSegment X1="591" Y1="161" X2="591" Y2="36"/>
-        <dgm:gSegment X1="591" Y1="36" X2="816" Y2="36"/>
+        <dgm:gSegment X1="562" Y1="304" X2="586" Y2="304"/>
+        <dgm:gSegment X1="586" Y1="304" X2="586" Y2="36"/>
+        <dgm:gSegment X1="586" Y1="36" X2="806" Y2="36"/>
         <dgm:baseColor r="153" g="153" b="153"/>
         <dgm:selectedColor r="49" g="106" b="196"/>
     </dgm:gWireLink>
     <dgm:gWireLink source="CadastrarFuncionariosMRV/userReconDB" target="userReconDB" width="2">
-        <dgm:gSegment X1="567" Y1="186" X2="606" Y2="186"/>
-        <dgm:gSegment X1="606" Y1="186" X2="606" Y2="154"/>
-        <dgm:gSegment X1="606" Y1="154" X2="816" Y2="154"/>
+        <dgm:gSegment X1="562" Y1="329" X2="601" Y2="329"/>
+        <dgm:gSegment X1="601" Y1="329" X2="601" Y2="154"/>
+        <dgm:gSegment X1="601" Y1="154" X2="806" Y2="154"/>
         <dgm:baseColor r="153" g="153" b="153"/>
         <dgm:selectedColor r="49" g="106" b="196"/>
     </dgm:gWireLink>
     <dgm:gWireLink source="CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB" target="prSoaGerarCamposUsuarioDB" width="2">
-        <dgm:gSegment X1="567" Y1="211" X2="591" Y2="211"/>
-        <dgm:gSegment X1="591" Y1="211" X2="591" Y2="284"/>
-        <dgm:gSegment X1="591" Y1="284" X2="816" Y2="284"/>
+        <dgm:gSegment X1="562" Y1="354" X2="616" Y2="354"/>
+        <dgm:gSegment X1="616" Y1="354" X2="616" Y2="284"/>
+        <dgm:gSegment X1="616" Y1="284" X2="806" Y2="284"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="CadastrarFuncionariosMRV/FindLoginSuperiorDB" target="FindLoginSuperiorDB" width="2">
+        <dgm:gSegment X1="562" Y1="379" X2="616" Y2="379"/>
+        <dgm:gSegment X1="616" Y1="379" X2="616" Y2="402"/>
+        <dgm:gSegment X1="616" Y1="402" X2="806" Y2="402"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="CadastrarFuncionariosMRV/FindCNDB" target="FindCNDB" width="2">
+        <dgm:gSegment X1="562" Y1="404" X2="601" Y2="404"/>
+        <dgm:gSegment X1="601" Y1="404" X2="601" Y2="520"/>
+        <dgm:gSegment X1="601" Y1="520" X2="806" Y2="520"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="CadastrarFuncionariosMRV/findMailBoxDB" target="findMailBoxDB" width="2">
+        <dgm:gSegment X1="562" Y1="429" X2="586" Y2="429"/>
+        <dgm:gSegment X1="586" Y1="429" X2="586" Y2="638"/>
+        <dgm:gSegment X1="586" Y1="638" X2="806" Y2="638"/>
         <dgm:baseColor r="153" g="153" b="153"/>
         <dgm:selectedColor r="49" g="106" b="196"/>
     </dgm:gWireLink>
