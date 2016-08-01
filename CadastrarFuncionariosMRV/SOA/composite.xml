@@ -28,8 +28,12 @@
   <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB"
           location="WSDLs/findMailBoxDB.wsdl" importType="wsdl"/>
   <service name="cadastrarfuncionariosmrv_client_ep" ui:wsdlLocation="WSDLs/CadastrarFuncionariosMRV.wsdl">
-    <interface.wsdl interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"/>
+    <interface.wsdl interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"
+                    callbackInterface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRVCallback)" />
     <binding.ws port="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.endpoint(cadastrarfuncionariosmrv_client_ep/CadastrarFuncionariosMRV_pt)"/>
+    <callback>
+      <binding.ws port="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.endpoint(cadastrarfuncionariosmrv_client_ep/CadastrarFuncionariosMRVCallback_pt)"/>
+    </callback>
   </service>
   <property name="productVersion" type="xs:string" many="false">12.2.1.1.0.160608</property>
   <property name="compositeID" type="xs:string" many="false">0d972457-88b2-4365-bcce-111b82981604</property>
@@ -37,7 +41,8 @@
     <implementation.bpel src="BPEL/CadastrarFuncionariosMRV.bpel"/>
     <componentType>
       <service name="cadastrarfuncionariosmrv_client" ui:wsdlLocation="WSDLs/CadastrarFuncionariosMRV.wsdl">
-        <interface.wsdl interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"/>
+        <interface.wsdl interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"
+                        callbackInterface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRVCallback)"/>
       </service>
       <reference name="MiDadosCadastroWS" ui:wsdlLocation="WSDLs/MI_DADOS_CADASTRO_OUT_QASWrapper.wsdl">
         <interface.wsdl interface="urn:br:com:mrv:HCM001_Dados_Cadastro_Funcionario#wsdl.interface(MI_DADOS_CADASTRO_OUT)"/>
@@ -58,7 +63,7 @@
         <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/findMailBoxDB#wsdl.interface(findMailBoxDB_ptt)"/>
       </reference>
     </componentType>
-    <property name="bpel.config.transaction" type="xs:string" many="false">required</property>
+    <property name="bpel.config.oneWayDeliveryPolicy" type="xs:string" many="false">async.persist</property>
   </component>
   <reference name="MiDadosCadastroWS" ui:wsdlLocation="WSDLs/MI_DADOS_CADASTRO_OUT_QAS.wsdl">
     <interface.wsdl interface="urn:br:com:mrv:HCM001_Dados_Cadastro_Funcionario#wsdl.interface(MI_DADOS_CADASTRO_OUT)"/>

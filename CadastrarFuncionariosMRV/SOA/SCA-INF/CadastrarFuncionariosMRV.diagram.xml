@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dgm:gDiagram xmlns:dgm="http://xmlns.oracle.com/sca/soadgm">
     <dgm:gService name="cadastrarfuncionariosmrv_client_ep">
-        <dgm:body borderWidth="2" arcRad="20" X="21" Y="294" width="137" height="84">
+        <dgm:body borderWidth="2" arcRad="20" X="21" Y="294" width="137" height="96">
             <dgm:borderColor r="153" g="153" b="153"/>
             <dgm:bgColor r="255" g="255" b="255"/>
         </dgm:body>
-        <dgm:shadow arcRad="20" X="11" Y="287" width="156" height="98">
+        <dgm:shadow arcRad="20" X="11" Y="287" width="156" height="110">
             <dgm:bgColor r="196" g="228" b="240"/>
         </dgm:shadow>
-        <dgm:outputPort name="cadastrarfuncionariosmrv_client_ep" X="127" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"/>
+        <dgm:outputPort name="cadastrarfuncionariosmrv_client_ep" X="127" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)" callbackInterface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRVCallback)"/>
         <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/soap_service_20x20.png" X="20" Y="4" width="20" height="20"/>
         <dgm:operations>
             <dgm:item>process</dgm:item>
+            <dgm:item>processResponse</dgm:item>
         </dgm:operations>
     </dgm:gService>
     <dgm:gReference name="MiDadosCadastroWS">
@@ -108,7 +109,7 @@
         <dgm:shadow arcRad="20" X="412" Y="272" width="150" height="202">
             <dgm:bgColor r="196" g="228" b="240"/>
         </dgm:shadow>
-        <dgm:inputPort name="cadastrarfuncionariosmrv_client" X="-10" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)"/>
+        <dgm:inputPort name="cadastrarfuncionariosmrv_client" X="-10" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRV)" callbackInterface="http://xmlns.oracle.com/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/CadastrarFuncionariosMRV#wsdl.interface(CadastrarFuncionariosMRVCallback)"/>
         <dgm:outputPort name="MiDadosCadastroWS" X="120" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="urn:br:com:mrv:HCM001_Dados_Cadastro_Funcionario#wsdl.interface(MI_DADOS_CADASTRO_OUT)"/>
         <dgm:outputPort name="userReconDB" X="120" Y="40" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/userReconDB#wsdl.interface(userReconDB_ptt)"/>
         <dgm:outputPort name="prSoaGerarCamposUsuarioDB" X="120" Y="65" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/CadastrarFuncionariosMRVApp/CadastrarFuncionariosMRV/prSoaGerarCamposUsuarioDB#wsdl.interface(prSoaGerarCamposUsuarioDB_ptt)"/>

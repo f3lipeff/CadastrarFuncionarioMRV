@@ -1,11 +1,8 @@
 create or replace PROCEDURE PR_SOA_GERAR_CAMPOS_USUARIO AS 
 
-    VLOGIADIMEDIATO     VARCHAR2(100);
     VLOGINAD            VARCHAR2(100);
     VLOGINSAP           VARCHAR2(100);
     VEXCHANGE           VARCHAR2(100);
-    VMAILBOXDATABASE    VARCHAR2(2000);
-    VCNAD               VARCHAR2(100);
     VCOUNT              BINARY_INTEGER;
     VARRAY              DBMS_UTILITY.LNAME_ARRAY;
     VPRIMEIRONOME       VARCHAR2(50);
@@ -25,8 +22,8 @@ create or replace PROCEDURE PR_SOA_GERAR_CAMPOS_USUARIO AS
       FROM  USER_RECON_FELIPE UR
      WHERE  UR.LOGIN_AD IS NULL;
      
-BEGIN null;
-  /**
+BEGIN
+  
   FOR VUSER IN CUSUARIOS LOOP
 
     --
@@ -48,7 +45,7 @@ BEGIN null;
       DBMS_UTILITY.COMMA_TO_TABLE(LIST=> REGEXP_REPLACE(REPLACE(VUSER.SOBRENOME,' ',','),'(^|,)','\1x'),TABLEN=>VCOUNT,TAB=>VARRAY);
       
       FOR i in 1 .. VCOUNT LOOP
-        IF i = 1 THEN
+        IF i = 1 AND i != VCOUNT THEN
           VPRIMEIROSOBRENOME := SUBSTR(VARRAY(i),2);
         ELSIF i = VCOUNT THEN
           VULTIMOSOBRENOME := SUBSTR(VARRAY(i),2);
@@ -190,62 +187,38 @@ BEGIN null;
     VEXCHANGE := VLOGINAD || '@' || VUSER.DOMINIO;
     
     --
-    -- Atribui Login Ado do Imediato do Usuario
-    --
-    /**IF VUSER.MATRICULA_SUPERIOR IS NOT NULL THEN
-      BEGIN
-            SELECT LOGIN_AD
-              INTO VLOGIADIMEDIATO
-              FROM USER_RECON_FELIPE
-             WHERE MATRICULA_FUNCIONARIO = VUSER.MATRICULA_SUPERIOR;
-      EXCEPTION WHEN NO_DATA_FOUND THEN
-          NULL;
-      END;
-    END IF;
-    
-    --
-    -- Atribui o mailbox de acordo a letra inicial do usuario.
-    --
-    IF VUSER.DESCRICAO_CARGO = 'Diretor' THEN 
-      VMAILBOXDATABASE := 'CN=Usuarios Especiais,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
-    ELSIF SUBSTR(VUSER.PRIMEIRO_NOME, 0, 1) < 'F' THEN
-      VMAILBOXDATABASE := 'CN=Mailbox A - E,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
-    ELSIF SUBSTR(VUSER.PRIMEIRO_NOME, 0, 1) < 'L' THEN
-      VMAILBOXDATABASE := 'CN=Mailbox F - K,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
-    ELSIF SUBSTR(VUSER.PRIMEIRO_NOME, 0, 1) < 'R' THEN
-      VMAILBOXDATABASE := 'CN=Mailbox L - Q,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
-    ELSE
-      VMAILBOXDATABASE := 'CN=Mailbox- R - Z,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
-    END IF;
-    
-    --
-    -- Busca o Common Name (CN) do AD do Usuario.
-    --
-    IF VUSER.OU_AD IS NOT NULL THEN
-      BEGIN
-            SELECT 'CN=' || VUSER.NOME_COMPLETO || ',' || CN_ORG
-              INTO VCNAD
-              FROM ORGANIZACAO_CN
-             WHERE OU_AD = VUSER.OU_AD;
-      EXCEPTION WHEN NO_DATA_FOUND THEN
-          NULL;
-      END;
-    END IF;
-    
-    --
     -- Atualiza os dados do usuarios.
     --
     UPDATE  USER_RECON_FELIPE
-       SET  LOGIN_IMEDIATO = VLOGIADIMEDIATO,
-            LOGIN_AD = VLOGINAD,
+       SET  LOGIN_AD = VLOGINAD,
             LOGIN_USUARIO = VLOGINSAP,
-            EXCHANGE = VEXCHANGE,
-            MAILBOX_DATABASE = VMAILBOXDATABASE,
-            CN_AD = VCNAD
+            EXCHANGE = VEXCHANGE
      WHERE  MATRICULA_FUNCIONARIO = VUSER.MATRICULA_FUNCIONARIO;
      
     VLOGINAD := NULL;
   
   END LOOP;
-  **/
+  
 END PR_SOA_GERAR_CAMPOS_USUARIO;
+
+create or replace FUNCTION FN_BUSCA_MAILBOX 
+(
+  VDESCRICAO_CARGO IN VARCHAR2 
+, VPRIMEIRO_NOME IN VARCHAR2
+) RETURN VARCHAR2 AS 
+BEGIN
+   --
+    -- Atribui o mailbox de acordo a letra inicial do usuario.
+    --
+    IF VDESCRICAO_CARGO = 'Diretor' THEN 
+      RETURN 'CN=Usuarios Especiais,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSIF SUBSTR(VPRIMEIRO_NOME, 0, 1) < 'F' THEN
+      RETURN 'CN=Mailbox A - E,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSIF SUBSTR(VPRIMEIRO_NOME, 0, 1) < 'L' THEN
+      RETURN 'CN=Mailbox F - K,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSIF SUBSTR(VPRIMEIRO_NOME, 0, 1) < 'R' THEN
+      RETURN 'CN=Mailbox L - Q,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSE
+      RETURN 'CN=Mailbox R - Z,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    END IF;
+END FN_BUSCA_MAILBOX;

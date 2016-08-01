@@ -6,7 +6,6 @@
   Created: Thu Jul 28 16:51:44 BRT 2016
   Author:  lipe
   Type: BPEL 2.0 Process
-  Purpose: Synchronous BPEL Process
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -->
 <process name="CadastrarFuncionariosMRV"
@@ -53,7 +52,7 @@
       used for callback. The location and correlation information associated
       with the client role are automatically set using WS-Addressing.
     -->
-    <partnerLink name="cadastrarfuncionariosmrv_client" partnerLinkType="client:CadastrarFuncionariosMRV" myRole="CadastrarFuncionariosMRVProvider"/>
+    <partnerLink name="cadastrarfuncionariosmrv_client" partnerLinkType="client:CadastrarFuncionariosMRV" myRole="CadastrarFuncionariosMRVProvider" partnerRole="CadastrarFuncionariosMRVRequester"/>
     <partnerLink name="MiDadosCadastroWS" partnerLinkType="ns1:MiDadosCadastroWS" partnerRole="MI_DADOS_CADASTRO_OUT"/>
     <partnerLink name="userReconDB" partnerLinkType="ns2:userReconDB_plt" partnerRole="userReconDB_role"/>
     <partnerLink name="prSoaGerarCamposUsuarioDB" partnerLinkType="ns4:prSoaGerarCamposUsuarioDB_plt"
@@ -73,11 +72,8 @@
   <variables>
     <!-- Reference to the message passed as input during initiation -->
     <variable name="inputVariable" messageType="client:CadastrarFuncionariosMRVRequestMessage"/>
-
-    <!-- Reference to the message that will be returned to the requester-->
     <variable name="outputVariable" messageType="client:CadastrarFuncionariosMRVResponseMessage"/>
   </variables>
-
   <!-- 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      ORCHESTRATION LOGIC                                               
@@ -96,16 +92,20 @@
         <variable name="InvokeUserReconDBMerge_InputVariable" messageType="ns2:UserReconFelipeCollection_msg"/>
       </variables>
       <sequence>
-        <assign name="AssignInputWS">
-          <copy>
-            <from>$inputVariable.payload/client:input</from>
-            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeMIDadosCadastroWS_InputVariable.MT_Dados_Cadastro_IN/DataUltAlteracao</to>
-          </copy>
-        </assign>
-        <invoke name="InvokeMIDadosCadastroWS" bpelx:invokeAsDetail="no" partnerLink="MiDadosCadastroWS"
-                portType="ns1:MI_DADOS_CADASTRO_OUT" operation="MI_DADOS_CADASTRO_OUT"
-                inputVariable="InvokeMIDadosCadastroWS_InputVariable"
-                outputVariable="InvokeMIDadosCadastroWS_OutputVariable"/>
+        <scope name="InvokeMIDadosCadastroWSScope">
+          <sequence>
+            <assign name="AssignInputWS">
+              <copy>
+                <from>$inputVariable.payload/client:input</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeMIDadosCadastroWS_InputVariable.MT_Dados_Cadastro_IN/DataUltAlteracao</to>
+              </copy>
+            </assign>
+            <invoke name="InvokeMIDadosCadastroWS" bpelx:invokeAsDetail="no" partnerLink="MiDadosCadastroWS"
+                    portType="ns1:MI_DADOS_CADASTRO_OUT" operation="MI_DADOS_CADASTRO_OUT"
+                    inputVariable="InvokeMIDadosCadastroWS_InputVariable"
+                    outputVariable="InvokeMIDadosCadastroWS_OutputVariable"/>
+          </sequence>
+        </scope>
         <if name="IfWSReturnedResults">
           <documentation>
             <![CDATA[true]]>
@@ -116,7 +116,7 @@
               <forEach parallel="no" counterName="userCounter" name="ForEachUser">
                 <startCounterValue expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">1</startCounterValue>
                 <finalCounterValue expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">count($InvokeMIDadosCadastroWS_OutputVariable.MT_Dados_Cadastro_OUT/DadosCadastro)</finalCounterValue>
-                <scope name="Scope1">
+                <scope name="ForEachUserScope">
                   <variables>
                     <variable name="InvokeUserReconDBSelect_InputVariable"
                               messageType="ns2:selectByPrimaryKey_inputParameters"/>
@@ -314,69 +314,77 @@
                         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dominio</to>
                       </copy>
                     </assign>
-                    <assign name="AssignSelectInputVar">
-                      <copy bpelx:insertMissingFromData="yes">
-                        <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario'))</from>
-                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBSelect_InputVariable.selectByPrimaryKey_inputParameters/ns3:matriculaFuncionario</to>
-                      </copy>
-                    </assign>
-                    <invoke name="InvokeUserReconDBSelect" bpelx:invokeAsDetail="no" partnerLink="userReconDB"
-                            portType="ns2:userReconDB_ptt" operation="selectByPrimaryKey"
-                            inputVariable="InvokeUserReconDBSelect_InputVariable"
-                            outputVariable="InvokeUserReconDBSelect_OutputVariable"/>
+                    <scope name="InvokeUserReconScope">
+                      <sequence>
+                        <assign name="AssignSelectInputVar">
+                          <copy bpelx:insertMissingFromData="yes">
+                            <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/MatriculaFuncionario'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBSelect_InputVariable.selectByPrimaryKey_inputParameters/ns3:matriculaFuncionario</to>
+                          </copy>
+                        </assign>
+                        <invoke name="InvokeUserReconDBSelect" bpelx:invokeAsDetail="no" partnerLink="userReconDB"
+                                portType="ns2:userReconDB_ptt" operation="selectByPrimaryKey"
+                                inputVariable="InvokeUserReconDBSelect_InputVariable"
+                                outputVariable="InvokeUserReconDBSelect_OutputVariable"/>
+                      </sequence>
+                    </scope>
                     <if name="IfFoundUser">
                       <documentation>
                         <![CDATA[true]]>
                       </documentation>
                       <condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">count($InvokeUserReconDBSelect_OutputVariable.UserReconFelipeCollection/ns3:UserReconFelipe) &gt; 0</condition>
-                      <assign name="AssignSOAGeneratedFields">
-                        <copy bpelx:insertMissingFromData="yes">
-                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:dataCadastro'))</from>
-                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataCadastro</to>
-                        </copy>
-                        <copy bpelx:insertMissingFromData="yes">
-                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginAd'))</from>
-                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginAd</to>
-                        </copy>
-                        <copy bpelx:insertMissingFromData="yes">
-                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:exchange'))</from>
-                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:exchange</to>
-                        </copy>
-                        <copy bpelx:insertMissingFromData="yes">
-                          <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginUsuario'))</from>
-                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginUsuario</to>
-                        </copy>
-                      </assign>
+                      <sequence name="Sequence8">
+                        <assign name="AssignSOAGeneratedFields">
+                          <copy bpelx:insertMissingFromData="yes">
+                            <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:dataCadastro'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataCadastro</to>
+                          </copy>
+                          <copy bpelx:insertMissingFromData="yes">
+                            <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginAd'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginAd</to>
+                          </copy>
+                          <copy bpelx:insertMissingFromData="yes">
+                            <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:exchange'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:exchange</to>
+                          </copy>
+                          <copy bpelx:insertMissingFromData="yes">
+                            <from>string(bpws:getVariableData('InvokeUserReconDBSelect_OutputVariable','UserReconFelipeCollection','ns3:UserReconFelipe[1]/ns3:loginUsuario'))</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:loginUsuario</to>
+                          </copy>
+                        </assign>
+                      </sequence>
                       <else>
-                        <sequence name="Sequence4">
-                          <assign name="AssignInvokeFindMailBoxDB_InputVariable">
-                            <copy bpelx:insertMissingFromData="yes">
-                              <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoCargo'))</from>
-                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFindMailBoxDB_InputVariable.InputParameters/ns9:VDESCRICAO_CARGO</to>
-                            </copy>
-                            <copy bpelx:insertMissingFromData="yes">
-                              <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/PrimeiroNome'))</from>
-                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFindMailBoxDB_InputVariable.InputParameters/ns9:VPRIMEIRO_NOME</to>
-                            </copy>
-                          </assign>
-                          <invoke name="InvokeFindMailBoxDB" bpelx:invokeAsDetail="no" partnerLink="findMailBoxDB"
-                                  portType="ns8:findMailBoxDB_ptt" operation="findMailBoxDB"
-                                  inputVariable="InvokeFindMailBoxDB_InputVariable"
-                                  outputVariable="InvokeFindMailBoxDB_OutputVariable"/>
-                          <assign name="AssignDataCadastroAndMailbox">
-                            <copy>
-                              <from>$InvokeFindMailBoxDB_OutputVariable.OutputParameters/ns9:FN_BUSCA_MAILBOX</from>
-                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:mailboxDatabase</to>
-                            </copy>
-                            <copy>
-                              <from>xp20:current-dateTime()</from>
-                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataCadastro</to>
-                            </copy>
-                          </assign>
-                        </sequence>
+                        <scope name="InvokeFindMailBoxScope">
+                          <sequence name="Sequence4">
+                            <assign name="AssignInvokeFindMailBoxDB_InputVariable">
+                              <copy bpelx:insertMissingFromData="yes">
+                                <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/DescricaoCargo'))</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFindMailBoxDB_InputVariable.InputParameters/ns9:VDESCRICAO_CARGO</to>
+                              </copy>
+                              <copy bpelx:insertMissingFromData="yes">
+                                <from>string(bpws:getVariableData('InvokeMIDadosCadastroWS_OutputVariable','MT_Dados_Cadastro_OUT','DadosCadastro[$userCounter]/PrimeiroNome'))</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeFindMailBoxDB_InputVariable.InputParameters/ns9:VPRIMEIRO_NOME</to>
+                              </copy>
+                            </assign>
+                            <invoke name="InvokeFindMailBoxDB" bpelx:invokeAsDetail="no" partnerLink="findMailBoxDB"
+                                    portType="ns8:findMailBoxDB_ptt" operation="findMailBoxDB"
+                                    inputVariable="InvokeFindMailBoxDB_InputVariable"
+                                    outputVariable="InvokeFindMailBoxDB_OutputVariable"/>
+                            <assign name="AssignDataCadastroAndMailbox">
+                              <copy>
+                                <from>$InvokeFindMailBoxDB_OutputVariable.OutputParameters/ns9:FN_BUSCA_MAILBOX</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:mailboxDatabase</to>
+                              </copy>
+                              <copy>
+                                <from>xp20:current-dateTime()</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeUserReconDBMerge_InputVariable.UserReconFelipeCollection/ns3:UserReconFelipe/ns3:dataCadastro</to>
+                              </copy>
+                            </assign>
+                          </sequence>
+                        </scope>
                       </else>
                     </if>
-                    <scope name="FindLoginSuperior">
+                    <scope name="FindLoginSuperiorScope">
                       <sequence name="Sequence2">
                         <assign name="AssignInvokeFindLoginSuperiorDBInput">
                           <copy>
@@ -397,7 +405,7 @@
                         </assign>
                       </sequence>
                     </scope>
-                    <scope name="FindCN">
+                    <scope name="FindCNScope">
                       <sequence name="Sequence3">
                         <assign name="AssignInvokeFIndCNDBInput">
                           <copy>
@@ -445,13 +453,12 @@
         </if>
       </sequence>
     </scope>
-    <assign name="Assign1">
+    <assign name="AssignOutput">
       <copy>
-        <from>"ok "</from>
+        <from>"Fluxo concluído"</from>
         <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/client:result</to>
       </copy>
     </assign>
-    <!-- Generate reply to synchronous request -->
-    <reply name="replyOutput" partnerLink="cadastrarfuncionariosmrv_client" portType="client:CadastrarFuncionariosMRV" operation="process" variable="outputVariable"/>
+    <invoke name="callbackClient" partnerLink="cadastrarfuncionariosmrv_client" portType="client:CadastrarFuncionariosMRVCallback" operation="processResponse" inputVariable="outputVariable"/>
   </sequence>
 </process>

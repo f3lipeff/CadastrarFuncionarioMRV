@@ -9,6 +9,7 @@
     >
     <plnk:partnerLinkType name="CadastrarFuncionariosMRV">
         <plnk:role name="CadastrarFuncionariosMRVProvider" portType="client:CadastrarFuncionariosMRV"/>
+        <plnk:role name="CadastrarFuncionariosMRVRequester" portType="client:CadastrarFuncionariosMRVCallback"/>
     </plnk:partnerLinkType>
     <wsdl:types>
         <schema xmlns="http://www.w3.org/2001/XMLSchema">
@@ -20,16 +21,23 @@
                         schemaLocation="../Schemas/userReconDB_table.xsd"/>
         </xsd:schema>
     </wsdl:types>
+    
     <wsdl:message name="CadastrarFuncionariosMRVRequestMessage">
         <wsdl:part name="payload" element="client:process"/>
     </wsdl:message>
     <wsdl:message name="CadastrarFuncionariosMRVResponseMessage">
         <wsdl:part name="payload" element="client:processResponse"/>
     </wsdl:message>
+    
     <wsdl:portType name="CadastrarFuncionariosMRV">
         <wsdl:operation name="process">
             <wsdl:input message="client:CadastrarFuncionariosMRVRequestMessage"/>
-            <wsdl:output message="client:CadastrarFuncionariosMRVResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <wsdl:portType name="CadastrarFuncionariosMRVCallback">
+        <wsdl:operation name="processResponse">
+                <wsdl:input message="client:CadastrarFuncionariosMRVResponseMessage"/>
         </wsdl:operation>
     </wsdl:portType>
 </wsdl:definitions>
