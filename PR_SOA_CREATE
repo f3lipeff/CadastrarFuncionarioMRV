@@ -1,0 +1,251 @@
+create or replace PROCEDURE PR_SOA_GERAR_CAMPOS_USUARIO AS 
+
+    VLOGIADIMEDIATO     VARCHAR2(100);
+    VLOGINAD            VARCHAR2(100);
+    VLOGINSAP           VARCHAR2(100);
+    VEXCHANGE           VARCHAR2(100);
+    VMAILBOXDATABASE    VARCHAR2(2000);
+    VCNAD               VARCHAR2(100);
+    VCOUNT              BINARY_INTEGER;
+    VARRAY              DBMS_UTILITY.LNAME_ARRAY;
+    VPRIMEIRONOME       VARCHAR2(50);
+    VNOMEMEIO           VARCHAR2(50);
+    VPRIMEIROSOBRENOME  VARCHAR2(50);
+    VULTIMOSOBRENOME    VARCHAR(50);
+    
+    CURSOR  CUSUARIOS IS
+    SELECT  UR.PRIMEIRO_NOME,
+            UR.SOBRENOME,
+            UR.NOME_COMPLETO,
+            UR.DOMINIO,
+            UR.DESCRICAO_CARGO,
+            UR.MATRICULA_SUPERIOR,
+            UR.MATRICULA_FUNCIONARIO,
+            UR.OU_AD
+      FROM  USER_RECON_FELIPE UR
+     WHERE  UR.LOGIN_AD IS NULL;
+     
+BEGIN null;
+  /**
+  FOR VUSER IN CUSUARIOS LOOP
+
+    --
+    -- GERA LOGIN DO AD
+    --
+    
+    BEGIN
+      
+      DBMS_UTILITY.COMMA_TO_TABLE(LIST=> REGEXP_REPLACE(REPLACE(VUSER.PRIMEIRO_NOME,' ',','),'(^|,)','\1x'),TABLEN=>VCOUNT,TAB=>VARRAY);
+      
+      FOR i in 1 .. VCOUNT LOOP      
+        IF i = 1 THEN
+          VPRIMEIRONOME := SUBSTR(VARRAY(i),2);
+        ELSIF i = 2 THEN
+          VNOMEMEIO := SUBSTR(VARRAY(i),2);
+        END IF;
+      END LOOP;
+      
+      DBMS_UTILITY.COMMA_TO_TABLE(LIST=> REGEXP_REPLACE(REPLACE(VUSER.SOBRENOME,' ',','),'(^|,)','\1x'),TABLEN=>VCOUNT,TAB=>VARRAY);
+      
+      FOR i in 1 .. VCOUNT LOOP
+        IF i = 1 THEN
+          VPRIMEIROSOBRENOME := SUBSTR(VARRAY(i),2);
+        ELSIF i = VCOUNT THEN
+          VULTIMOSOBRENOME := SUBSTR(VARRAY(i),2);
+        END IF;
+      END LOOP;
+    
+    END;
+    
+    --
+    -- Verifica se existe um login ad no formato nome.ultimosobrenome
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VPRIMEIRONOME || '.' || VULTIMOSOBRENOME);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD := LOWER(VPRIMEIRONOME || '.' || VULTIMOSOBRENOME);
+    END IF;
+    
+    --
+    -- Verifica se existe um login ad no formato nome.primeirosobrenome
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VPRIMEIRONOME || '.' || VPRIMEIROSOBRENOME);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD := LOWER(VPRIMEIRONOME || '.' || VPRIMEIROSOBRENOME);
+    END IF;
+    
+    --
+    -- Verifica se existe um login ad no formato nome.nomeMeio
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VPRIMEIRONOME || '.' || VNOMEMEIO);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD := LOWER(VPRIMEIRONOME || '.' || VNOMEMEIO);
+    END IF;
+    
+    --
+    -- Verifica se existe um login ad no formato nome.(primeiraLetraPrimeiroSobrenome)ultimoSobrenome
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VPRIMEIRONOME || '.' || SUBSTR(VPRIMEIROSOBRENOME,0,1) || VULTIMOSOBRENOME);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD := LOWER(VPRIMEIRONOME || '.' || SUBSTR(VPRIMEIROSOBRENOME,0,1) || VULTIMOSOBRENOME);
+    END IF;
+    
+    --
+    -- Verifica se existe um login ad no formato nome.(primeiraLetraNomeMeio)ultimoSobrenome
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VPRIMEIRONOME || '.' || SUBSTR(VNOMEMEIO,0,1) || VULTIMOSOBRENOME);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD :=  LOWER(VPRIMEIRONOME || '.' || SUBSTR(VNOMEMEIO,0,1) || VULTIMOSOBRENOME);
+    END IF;
+    
+    --
+    -- Verifica se existe um login ad no formato nome.(primeiraLetraPrimeiroSobrenome)(primeiraLetraNomeMeio)ultimoSobrenome
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VPRIMEIRONOME || '.' || SUBSTR(VPRIMEIROSOBRENOME,0,1) || SUBSTR(VNOMEMEIO,0,1) || VULTIMOSOBRENOME);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD :=  LOWER(VPRIMEIRONOME || '.' || SUBSTR(VPRIMEIROSOBRENOME,0,1) || SUBSTR(VNOMEMEIO,0,1) || VULTIMOSOBRENOME);
+    END IF;
+    
+    --
+    -- Verifica se existe um login ad no formato ultimoSobrenome.nome
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VULTIMOSOBRENOME || '.' || VPRIMEIRONOME);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD :=  LOWER(VULTIMOSOBRENOME || '.' || VPRIMEIRONOME);
+    END IF;
+    
+    --
+    -- Verifica se existe um login ad no formato primeiroSobrenome.nome
+    --
+    IF VLOGINAD IS NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGINAD
+              FROM USER_RECON_FELIPE
+             WHERE LOGIN_AD =  LOWER(VPRIMEIROSOBRENOME || '.' || VPRIMEIRONOME);
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+      VLOGINAD :=  LOWER(VULTIMOSOBRENOME || '.' || VPRIMEIRONOME);
+    END IF;
+    
+    --
+    -- Gera o login do SAP
+    --
+    SELECT 'MS' || TRIM(TO_CHAR(SEQ_LOGIN_SAP.NEXTVAL, '0000000'))
+      INTO VLOGINSAP
+      FROM DUAL;
+    
+    --
+    -- Gera o email do usuario
+    --
+    VEXCHANGE := VLOGINAD || '@' || VUSER.DOMINIO;
+    
+    --
+    -- Atribui Login Ado do Imediato do Usuario
+    --
+    /**IF VUSER.MATRICULA_SUPERIOR IS NOT NULL THEN
+      BEGIN
+            SELECT LOGIN_AD
+              INTO VLOGIADIMEDIATO
+              FROM USER_RECON_FELIPE
+             WHERE MATRICULA_FUNCIONARIO = VUSER.MATRICULA_SUPERIOR;
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+    END IF;
+    
+    --
+    -- Atribui o mailbox de acordo a letra inicial do usuario.
+    --
+    IF VUSER.DESCRICAO_CARGO = 'Diretor' THEN 
+      VMAILBOXDATABASE := 'CN=Usuarios Especiais,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSIF SUBSTR(VUSER.PRIMEIRO_NOME, 0, 1) < 'F' THEN
+      VMAILBOXDATABASE := 'CN=Mailbox A - E,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSIF SUBSTR(VUSER.PRIMEIRO_NOME, 0, 1) < 'L' THEN
+      VMAILBOXDATABASE := 'CN=Mailbox F - K,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSIF SUBSTR(VUSER.PRIMEIRO_NOME, 0, 1) < 'R' THEN
+      VMAILBOXDATABASE := 'CN=Mailbox L - Q,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    ELSE
+      VMAILBOXDATABASE := 'CN=Mailbox- R - Z,CN=Databases,CN=Exchange Administrative Group (FYDIBOHF23SPDLT),CN=Administrative Groups,CN=MRV,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=mrvbh,DC=local';
+    END IF;
+    
+    --
+    -- Busca o Common Name (CN) do AD do Usuario.
+    --
+    IF VUSER.OU_AD IS NOT NULL THEN
+      BEGIN
+            SELECT 'CN=' || VUSER.NOME_COMPLETO || ',' || CN_ORG
+              INTO VCNAD
+              FROM ORGANIZACAO_CN
+             WHERE OU_AD = VUSER.OU_AD;
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+          NULL;
+      END;
+    END IF;
+    
+    --
+    -- Atualiza os dados do usuarios.
+    --
+    UPDATE  USER_RECON_FELIPE
+       SET  LOGIN_IMEDIATO = VLOGIADIMEDIATO,
+            LOGIN_AD = VLOGINAD,
+            LOGIN_USUARIO = VLOGINSAP,
+            EXCHANGE = VEXCHANGE,
+            MAILBOX_DATABASE = VMAILBOXDATABASE,
+            CN_AD = VCNAD
+     WHERE  MATRICULA_FUNCIONARIO = VUSER.MATRICULA_FUNCIONARIO;
+     
+    VLOGINAD := NULL;
+  
+  END LOOP;
+  **/
+END PR_SOA_GERAR_CAMPOS_USUARIO;
